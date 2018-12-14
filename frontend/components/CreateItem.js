@@ -4,6 +4,8 @@ import gql from "graphql-tag";
 import Form from "./styles/Form";
 import formatMoney from "../lib/formatMoney";
 
+const CREATE_ITEM_MUTATION = gql``;
+
 class CreateItem extends Component {
   state = {
     title: "",
@@ -75,3 +77,4 @@ class CreateItem extends Component {
 }
 
 export default CreateItem;
+export { CREATE_ITEM_MUTATION };
