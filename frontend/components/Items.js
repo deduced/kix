@@ -2,18 +2,7 @@ import React, { Component } from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
-
-const Center = styled.div`
-  text-align: center;
-`;
-
-const ItemsList = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 60px;
-  max-width: ${props => props.theme.maxWidth};
-  margin: 0 auto;
-`;
+import Item from "./Item";
 
 const ALL_ITEMS_QUERY = gql`
   query ALL_ITEMS_QUERY {
@@ -28,6 +17,18 @@ const ALL_ITEMS_QUERY = gql`
   }
 `;
 
+const Center = styled.div`
+  text-align: center;
+`;
+
+const ItemsList = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 60px;
+  max-width: ${props => props.theme.maxWidth};
+  margin: 0 auto;
+`;
+
 class Items extends Component {
   render() {
     return (
@@ -39,7 +40,7 @@ class Items extends Component {
             return (
               <ItemsList>
                 {data.items.map(item => (
-                  <p>{item.title}</p>
+                  <Item key={item.id} item={item} />
                 ))}
               </ItemsList>
             );
