@@ -42,6 +42,31 @@ class CreateItem extends Component {
     this.setState({ [name]: val });
   };
 
+  uploadFile = async event => {
+    console.log("Uploading file");
+    const files = event.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    //TODO move upload_preset value to env variable
+    data.append("upload_preset", "kixecomm");
+
+    //TODO move endpoint to env variable
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/deduced/image/upload",
+      {
+        method: "POST",
+        body: data
+      }
+    );
+
+    const file = await response.json();
+    console.log(file);
+    this.setState({
+      image: file.secure_url,
+      largeImage: file.eager[0].secure_url
+    });
+  };
+
   render() {
     return (
       <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
@@ -50,7 +75,6 @@ class CreateItem extends Component {
             onSubmit={async e => {
               e.preventDefault();
               const response = await createItem();
-              console.log(response);
               Router.push({
                 pathname: "/item",
                 query: { id: response.data.createItem.id }
@@ -62,6 +86,18 @@ class CreateItem extends Component {
 
             {/* On submit, we disable the form and start the loading animation */}
             <fieldset disabled={loading} aria-busy={loading}>
+              <label htmlFor="file">
+                Image
+                <input
+                  type="file"
+                  id="file"
+                  name="file"
+                  placeholder="Upload an image"
+                  required
+                  onChange={this.uploadFile}
+                />
+              </label>
+
               <label htmlFor="title">
                 Title
                 <input
