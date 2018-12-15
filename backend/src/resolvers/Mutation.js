@@ -9,15 +9,25 @@ const Mutations = {
     );
 
     return item;
+  },
+
+  updateItem(parent, args, ctx, info) {
+    // get copy of args
+    const updates = { ...args };
+
+    //remove id
+    delete updates.id;
+
+    return ctx.db.mutation.updateItem(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
   }
-
-  // createDog(parent, args, ctx, info) {
-  //   global.dogs = global.dogs || [];
-
-  //   const newDog = { name: args.name };
-  //   global.dogs.push(newDog);
-  //   return newDog;
-  // }
 };
 
 module.exports = Mutations;
