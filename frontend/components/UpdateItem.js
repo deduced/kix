@@ -25,13 +25,7 @@ const UPDATE_ITEM_MUTATION = gql`
     $image: String
     $largeImage: String
   ) {
-    createItem(
-      title: $title
-      description: $description
-      price: $price
-      image: $image
-      largeImage: $largeImage
-    ) {
+    createItem(title: $title, description: $description, price: $price) {
       id
     }
   }
@@ -79,7 +73,7 @@ class UpdateItem extends Component {
                         name="title"
                         placeholder="Title"
                         required
-                        value={this.state.title}
+                        defaultValue={data.item.title}
                         onChange={this.handleChange}
                       />
                     </label>
@@ -92,7 +86,7 @@ class UpdateItem extends Component {
                         name="price"
                         placeholder="Price"
                         required
-                        value={this.state.price}
+                        defaultValue={data.item.price}
                         onChange={this.handleChange}
                       />
                     </label>
@@ -104,12 +98,12 @@ class UpdateItem extends Component {
                         name="description"
                         placeholder="Enter a description"
                         required
-                        value={this.state.description}
+                        defaultValue={data.item.description}
                         onChange={this.handleChange}
                       />
                     </label>
 
-                    <button type="submit">Submit</button>
+                    <button type="submit">Save Changes</button>
                   </fieldset>
                 </Form>
               )}
