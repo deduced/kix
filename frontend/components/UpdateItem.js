@@ -19,14 +19,21 @@ const SINGLE_ITEM_QUERY = gql`
 
 const UPDATE_ITEM_MUTATION = gql`
   mutation UPDATE_ITEM_MUTATION(
-    $title: String!
-    $description: String!
-    $price: Int!
-    $image: String
-    $largeImage: String
+    $id: ID!
+    $title: String
+    $description: String
+    $price: Int
   ) {
-    createItem(title: $title, description: $description, price: $price) {
+    updateItem(
+      id: $id
+      title: $title
+      description: $description
+      price: $price
+    ) {
       id
+      title
+      description
+      price
     }
   }
 `;
@@ -41,25 +48,31 @@ class UpdateItem extends Component {
     this.setState({ [name]: val });
   };
 
+  updateItem = async (event, updateItemMutation) => {
+    event.preventDefault();
+    return await updateItemMutation({
+      variables: {
+        id: this.props.id,
+        ...this.state
+      }
+    });
+  };
   render() {
     return (
       <Query query={SINGLE_ITEM_QUERY} variables={{ id: this.props.id }}>
         {({ data, loading }) => {
           if (loading) return <p>Loading...</p>;
+          if (!data.item)
+            return (
+              <p>
+                No Item Found for ID <em>{this.props.id}</em>
+              </p>
+            );
 
           return (
             <Mutation mutation={UPDATE_ITEM_MUTATION} variables={this.state}>
-              {(createItem, { loading, error }) => (
-                <Form
-                  onSubmit={async e => {
-                    e.preventDefault();
-                    const response = await createItem();
-                    Router.push({
-                      pathname: "/item",
-                      query: { id: response.data.createItem.id }
-                    });
-                  }}
-                >
+              {(updateItem, { loading, error }) => (
+                <Form onSubmit={event => this.updateItem(event, updateItem)}>
                   {/* ErrorMessage will only render if there is an error */}
                   <ErrorMessage error={error} />
 
@@ -103,7 +116,9 @@ class UpdateItem extends Component {
                       />
                     </label>
 
-                    <button type="submit">Save Changes</button>
+                    <button type="submit">
+                      Sav{loading ? "ing" : "e"} Changes
+                    </button>
                   </fieldset>
                 </Form>
               )}
