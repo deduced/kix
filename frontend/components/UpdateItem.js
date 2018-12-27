@@ -6,6 +6,7 @@ import Form from "./styles/Form";
 import formatMoney from "../lib/formatMoney";
 import ErrorMessage from "./ErrorMessage";
 
+//TODO refactor SINGLE_ITEM_QUERY into query file
 const SINGLE_ITEM_QUERY = gql`
   query SINGLE_ITEM_QUERY($id: ID!) {
     item(where: { id: $id }) {
