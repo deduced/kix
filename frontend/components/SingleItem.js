@@ -2,6 +2,27 @@ import React, { Component } from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import Error from "./ErrorMessage";
+import styled from "styled-components";
+import Head from "next/head";
+
+const SingleItemStyles = styled.div`
+  max-width: 1200px;
+  margin: 2rem auto;
+  box-shadow: ${props => props.theme.bs};
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  min-height: 800px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .details {
+    margin: 3rem;
+    font-size: 2rem;
+  }
+`;
 
 //TODO refactor SINGLE_ITEM_QUERY into query file
 const SINGLE_ITEM_QUERY = gql`
@@ -23,9 +44,21 @@ class SingleItem extends Component {
           if (error) return <Error error={error} />;
           if (loading) return <p>Loading...</p>;
           console.log(data);
-          if (!data.item) return <p> No Item Found for {this.props.id}</p>
+          if (!data.item) return <p> No Item Found for {this.props.id}</p>;
 
-          return <p>Single Item component {this.props.id}</p>;
+          const item = data.item;
+          return (
+            <SingleItemStyles>
+              <Head>
+                <title>Kix! | {item.title}</title>
+              </Head>
+              <img src={item.largeImage} alt="{item.title}" />
+              <div className="details">
+                <h2>Viewing {item.title}</h2>
+                <p>{item.description}</p>
+              </div>
+            </SingleItemStyles>
+          );
         }}
       </Query>
     );
