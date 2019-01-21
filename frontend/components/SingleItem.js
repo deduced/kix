@@ -23,6 +23,7 @@ class SingleItem extends Component {
           if (error) return <Error error={error} />;
           if (loading) return <p>Loading...</p>;
           console.log(data);
+          if (!data.item) return <p> No Item Found for {this.props.id}</p>
 
           return <p>Single Item component {this.props.id}</p>;
         }}
