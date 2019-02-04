@@ -38,6 +38,8 @@ class Items extends Component {
         <Pagination page={this.props.page} />
         <Query
           query={ALL_ITEMS_QUERY}
+          //Uncomment if you don't want to use caching
+          // fetchPolicy="network-only"
           variables={{
             skip: this.props.page * perPage - perPage
           }}
