@@ -1,17 +1,23 @@
-require('dotenv').config();
-const createServer = require('./createServer');
-const db = require('./db');
+const cookieParser = require("cookie-parser");
 
-const server = createServer(); 
+require("dotenv").config();
+const createServer = require("./createServer");
+const db = require("./db");
 
-//TODO - use express middleware to handle cookies with JWT
+const server = createServer();
+
+server.express.use(cookieParser());
+
 //TODO use express middleware to populate current user
 
-server.start({
-  cors: {
-    credentials: true,
-    origin: process.env.FRONTEND_URL
+server.start(
+  {
+    cors: {
+      credentials: true,
+      origin: process.env.FRONTEND_URL
+    }
   },
-}, deets => {
-  console.log(`Server is now running on port http://localhost:${deets.port}`)
-}); 
+  deets => {
+    console.log(`Server is now running on port http://localhost:${deets.port}`);
+  }
+);
